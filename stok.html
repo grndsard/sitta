@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stok Bahan Ajar - UT Bahan Ajar</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="dashboard-header">
+            <h1>📚 Informasi Stok Bahan Ajar</h1>
+            <p>Kelola dan pantau stok bahan ajar Universitas Terbuka</p>
+            <a href="dashboard.html" class="back-link">← Kembali ke Dashboard</a>
+        </div>
+
+        <div class="stok-container">
+            <!-- Form untuk menambah bahan ajar baru -->
+            <div class="add-form">
+                <h3>Tambah Bahan Ajar Baru</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="kodeBaru">Kode Bahan Ajar:</label>
+                        <input type="text" id="kodeBaru" placeholder="Contoh: MKDU4114">
+                    </div>
+                    <div class="form-group">
+                        <label for="namaBaru">Nama Bahan Ajar:</label>
+                        <input type="text" id="namaBaru" placeholder="Contoh: Matematika Dasar">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="stokBaru">Jumlah Stok:</label>
+                        <input type="number" id="stokBaru" placeholder="Contoh: 100" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="hargaBaru">Harga (Rp):</label>
+                        <input type="number" id="hargaBaru" placeholder="Contoh: 50000" min="0">
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="tambahBahanAjar()">Tambah Bahan Ajar</button>
+            </div>
+
+            <!-- Tabel stok bahan ajar -->
+            <h3>Daftar Stok Bahan Ajar</h3>
+            <table class="stok-table">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Kode</th>
+                        <th>Nama Bahan Ajar</th>
+                        <th>Stok</th>
+                        <th>Harga</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="tabelStok">
+                    <!-- Data akan diisi secara dinamis -->
+                </tbody>
+            </table>
+
+            <!-- Statistik stok -->
+            <div class="status-info" style="margin-top: 30px;">
+                <div class="info-item">
+                    <div class="info-label">Total Jenis Bahan Ajar</div>
+                    <div class="info-value" id="totalJenis">0</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Total Stok Tersedia</div>
+                    <div class="info-value" id="totalStok">0</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Nilai Total Stok</div>
+                    <div class="info-value" id="nilaiTotal">Rp 0</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Stok Menipis</div>
+                    <div class="info-value" id="stokMenipis">0</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+    <script>
+        /**
+         * Inisialisasi halaman stok saat dimuat
+         * Mengecek login, menampilkan data stok, dan menghitung statistik
+         */
+        window.onload = function() {
+            cekStatusLogin();
+            tampilkanDataStok();
+            hitungStatistik();
+        }
+
+        /**
+         * Fungsi untuk memverifikasi status login pengguna
+         * Redirect ke halaman login jika belum login
+         */
+        function cekStatusLogin() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            if (!isLoggedIn) {
+                window.location.href = 'index.html';
+            }
+        }
+
+        /**
+         * Fungsi untuk navigasi kembali ke dashboard
+         */
+        function kembaliKeDashboard() {
+            window.location.href = 'dashboard.html';
+        }
+
+        /**
+         * Fungsi untuk menampilkan data stok bahan ajar dalam tabel
+         * Mengambil data dari array dataBahanAjar di script.js
+         */
+        function tampilkanDataStok() {
+            const tabelBody = document.getElementById('tabelStok');
+            tabelBody.innerHTML = ''; // Kosongkan tabel sebelum mengisi data baru
+            
+            // Iterasi melalui setiap item bahan ajar
+            dataBahanAjar.forEach((item, index) => {
+                const row = document.createElement('tr');
+                
+                // Tentukan status dan warna berdasarkan jumlah stok
+                let status = 'Tersedia';
+                let statusColor = '#28a745'; // Hijau untuk stok normal
+                
+                if (item.stok === 0) {
+                    status = 'Habis';
+                    statusColor = '#dc3545'; // Merah untuk stok habis
+                } else if (item.stok < 50) {
+                    status = 'Menipis';
+                    statusColor = '#ffc107'; // Kuning untuk stok menipis
+                }
+                
+                // Buat baris tabel dengan data bahan ajar
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td><strong>${item.kode}</strong></td>
+                    <td>${item.nama}</td>
+                    <td>${item.stok} pcs</td>
+                    <td>${formatRupiah(item.harga)}</td>
+                    <td><span style="color: ${statusColor}; font-weight: bold;">${status}</span></td>
+                `;
+                
+                tabelBody.appendChild(row);
+            });
+        }
+
+        /**
+         * Fungsi untuk menambahkan bahan ajar baru
+         * Melakukan validasi input dan duplikasi data
+         */
+        function tambahBahanAjar() {
+            // Ambil nilai dari form input
+            const kode = document.getElementById('kodeBaru').value.trim().toUpperCase();
+            const nama = document.getElementById('namaBaru').value.trim();
+            const stok = document.getElementById('stokBaru').value;
+            const harga = document.getElementById('hargaBaru').value;
+            
+            // Validasi kelengkapan input
+            if (!kode || !nama || !stok || !harga) {
+                alert('Mohon lengkapi semua field!');
+                return;
+            }
+            
+            // Validasi stok harus lebih dari 0
+            if (parseInt(stok) <= 0) {
+                alert('Stok harus lebih dari 0!');
+                return;
+            }
+            
+            // Cek duplikasi kode bahan ajar
+            const kodeSudahAda = dataBahanAjar.some(item => item.kode === kode);
+            if (kodeSudahAda) {
+                alert('Kode bahan ajar sudah ada! Gunakan kode yang berbeda.');
+                return;
+            }
+            
+            // Cek duplikasi nama bahan ajar (case-insensitive)
+            const namaSudahAda = dataBahanAjar.some(item => item.nama.toLowerCase() === nama.toLowerCase());
+            if (namaSudahAda) {
+                alert('Nama bahan ajar sudah ada! Gunakan nama yang berbeda.');
+                return;
+            }
+            
+            // Tambahkan data baru ke array menggunakan fungsi dari script.js
+            addBahanAjar(kode, nama, stok, harga);
+            
+            // Perbarui tampilan tabel dan statistik
+            tampilkanDataStok();
+            hitungStatistik();
+            
+            // Reset form input
+            kosongkanForm();
+            
+            alert('Bahan ajar berhasil ditambahkan!');
+        }
+
+        /**
+         * Fungsi untuk mengosongkan semua field form input
+         */
+        function kosongkanForm() {
+            document.getElementById('kodeBaru').value = '';
+            document.getElementById('namaBaru').value = '';
+            document.getElementById('stokBaru').value = '';
+            document.getElementById('hargaBaru').value = '';
+        }
+
+        /**
+         * Fungsi untuk menghitung dan menampilkan statistik stok
+         * Menghitung total jenis, total stok, nilai total, dan stok menipis
+         */
+        function hitungStatistik() {
+            const totalJenis = dataBahanAjar.length;
+            const totalStok = dataBahanAjar.reduce((sum, item) => sum + item.stok, 0);
+            const nilaiTotal = dataBahanAjar.reduce((sum, item) => sum + (item.stok * item.harga), 0);
+            const stokMenipis = dataBahanAjar.filter(item => item.stok < 50 && item.stok > 0).length;
+            
+            // Perbarui tampilan statistik di UI
+            document.getElementById('totalJenis').textContent = totalJenis + ' jenis';
+            document.getElementById('totalStok').textContent = totalStok + ' pcs';
+            document.getElementById('nilaiTotal').textContent = formatRupiah(nilaiTotal);
+            document.getElementById('stokMenipis').textContent = stokMenipis + ' jenis';
+        }
+
+        /**
+         * Event listener untuk submit form dengan tombol Enter
+         * Memungkinkan pengguna menambah bahan ajar dengan menekan Enter
+         */
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && e.target.closest('.add-form')) {
+                e.preventDefault();
+                tambahBahanAjar();
+            }
+        });
+    </script>
+</body>
+</html>

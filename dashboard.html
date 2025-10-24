@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - UT Bahan Ajar</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="dashboard-header">
+            <div class="greeting" id="greetingText"></div>
+            <p>Selamat datang di sistem pemesanan bahan ajar UT</p>
+        </div>
+
+        <div class="menu-grid">
+            <div class="menu-card" onclick="tutupSubmenu(); navigateTo('stok.html')">
+                <h3>📚 Informasi Bahan Ajar</h3>
+                <p>Lihat dan kelola stok bahan ajar yang tersedia</p>
+            </div>
+
+            <div class="menu-card" onclick="tutupSubmenu(); navigateTo('tracking.html')">
+                <h3>🚚 Tracking Pengiriman</h3>
+                <p>Lacak status pengiriman bahan ajar</p>
+            </div>
+
+            <div class="menu-card" onclick="bukaSubmenu('laporanSubmenu')">
+                <h3>📊 Laporan</h3>
+                <p>Monitoring progress dan rekap bahan ajar</p>
+            </div>
+
+            <div class="menu-card" onclick="tampilkanHistori()">
+                <h3>📋 Histori Transaksi</h3>
+                <p>Riwayat transaksi bahan ajar</p>
+            </div>
+        </div>
+
+        <!-- Submenu Laporan -->
+        <div id="laporanSubmenu" style="display: none;">
+            <div class="menu-grid">
+                <div class="menu-card" onclick="tampilkanMonitoring()">
+                    <h3>📈 Monitoring Progress DO</h3>
+                    <p>Monitor progress delivery order bahan ajar</p>
+                </div>
+                <div class="menu-card" onclick="tampilkanRekap()">
+                    <h3>📑 Rekap Bahan Ajar</h3>
+                    <p>Rekap data bahan ajar per periode</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Area untuk menampilkan konten dinamis -->
+        <div id="contentArea"></div>
+        
+        <!-- Tombol Logout -->
+        <div class="logout-section">
+            <button class="btn btn-logout" onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+    <script>
+        /**
+         * Inisialisasi halaman dashboard saat dimuat
+         * Mengecek status login dan menampilkan greeting
+         */
+        window.onload = function() {
+            cekStatusLogin();
+            tampilkanGreeting();
+        }
+
+        /**
+         * Fungsi untuk memverifikasi status login pengguna
+         * Redirect ke halaman login jika belum login
+         */
+        function cekStatusLogin() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            if (!isLoggedIn) {
+                window.location.href = 'index.html';
+            }
+        }
+
+        /**
+         * Fungsi untuk menampilkan sapaan berdasarkan waktu dan email pengguna
+         * Menggunakan fungsi getGreeting() dari script.js
+         */
+        function tampilkanGreeting() {
+            const greetingElement = document.getElementById('greetingText');
+            const greeting = getGreeting();
+            const userEmail = localStorage.getItem('userEmail');
+            greetingElement.textContent = `${greeting}, ${userEmail}!`;
+        }
+
+        /**
+         * Fungsi untuk navigasi ke halaman lain
+         * @param {string} page - Nama file halaman tujuan
+         */
+        function navigateTo(page) {
+            window.location.href = page;
+        }
+
+        /**
+         * Fungsi untuk toggle tampilan submenu laporan
+         * @param {string} submenuId - ID dari submenu yang akan dibuka/tutup
+         */
+        function bukaSubmenu(submenuId) {
+            const submenu = document.getElementById(submenuId);
+            submenu.style.display = submenu.style.display === 'none' ? 'block' : 'none';
+        }
+
+        /**
+         * Fungsi untuk logout pengguna
+         * Menghapus data session dan redirect ke halaman login
+         */
+        function logout() {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('userEmail');
+            window.location.href = 'index.html';
+        }
+
+        /**
+         * Fungsi untuk menutup submenu laporan
+         * Digunakan ketika pengguna mengklik menu lain
+         */
+        function tutupSubmenu() {
+            document.getElementById('laporanSubmenu').style.display = 'none';
+        }
+
+        // Fungsi untuk menampilkan histori transaksi
+        function tampilkanHistori() {
+            tutupSubmenu();
+            const contentArea = document.getElementById('contentArea');
+            contentArea.innerHTML = `
+                <div class="tracking-container">
+                    <h2>Histori Transaksi Bahan Ajar</h2>
+                    <table class="stok-table">
+                        <thead>
+                            <tr>
+                                <th>No. DO</th>
+                                <th>Nama Mahasiswa</th>
+                                <th>Tanggal</th>
+                                <th>Status</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>DO001</td>
+                                <td>Ahmad Rizki</td>
+                                <td>2024-01-15</td>
+                                <td>Dalam Perjalanan</td>
+                                <td>Rp 150.000</td>
+                            </tr>
+                            <tr>
+                                <td>DO002</td>
+                                <td>Siti Nurhaliza</td>
+                                <td>2024-01-10</td>
+                                <td>Terkirim</td>
+                                <td>Rp 200.000</td>
+                            </tr>
+                            <tr>
+                                <td>DO003</td>
+                                <td>Budi Santoso</td>
+                                <td>2024-01-20</td>
+                                <td>Diproses</td>
+                                <td>Rp 175.000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+
+        // Fungsi untuk menampilkan monitoring progress
+        function tampilkanMonitoring() {
+            const contentArea = document.getElementById('contentArea');
+            contentArea.innerHTML = `
+                <div class="tracking-container">
+                    <h2>Monitoring Progress Delivery Order</h2>
+                    <div class="status-info">
+                        <div class="info-item">
+                            <div class="info-label">Total DO Hari Ini</div>
+                            <div class="info-value">15 pesanan</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">DO Terkirim</div>
+                            <div class="info-value">8 pesanan</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">DO Dalam Proses</div>
+                            <div class="info-value">5 pesanan</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">DO Pending</div>
+                            <div class="info-value">2 pesanan</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Fungsi untuk menampilkan rekap bahan ajar
+        function tampilkanRekap() {
+            const contentArea = document.getElementById('contentArea');
+            contentArea.innerHTML = `
+                <div class="tracking-container">
+                    <h2>Rekap Bahan Ajar</h2>
+                    <table class="stok-table">
+                        <thead>
+                            <tr>
+                                <th>Kode</th>
+                                <th>Nama Bahan Ajar</th>
+                                <th>Terjual Bulan Ini</th>
+                                <th>Stok Tersisa</th>
+                                <th>Pendapatan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>MKDU4110</td>
+                                <td>Bahasa Indonesia</td>
+                                <td>25 pcs</td>
+                                <td>150 pcs</td>
+                                <td>Rp 1.125.000</td>
+                            </tr>
+                            <tr>
+                                <td>MKDU4111</td>
+                                <td>Pendidikan Kewarganegaraan</td>
+                                <td>30 pcs</td>
+                                <td>200 pcs</td>
+                                <td>Rp 1.500.000</td>
+                            </tr>
+                            <tr>
+                                <td>MKDU4112</td>
+                                <td>Ilmu Alamiah Dasar</td>
+                                <td>20 pcs</td>
+                                <td>100 pcs</td>
+                                <td>Rp 1.100.000</td>
+                            </tr>
+                            <tr>
+                                <td>MKDU4113</td>
+                                <td>Ilmu Sosial Budaya Dasar</td>
+                                <td>35 pcs</td>
+                                <td>175 pcs</td>
+                                <td>Rp 1.680.000</td>
+                            </tr>
+                            <tr>
+                                <td>MKDU4221</td>
+                                <td>Statistika</td>
+                                <td>15 pcs</td>
+                                <td>80 pcs</td>
+                                <td>Rp 900.000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

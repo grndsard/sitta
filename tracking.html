@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tracking Pengiriman - UT Bahan Ajar</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="dashboard-header">
+            <h1>🚚 Tracking Pengiriman</h1>
+            <p>Lacak status pengiriman bahan ajar Anda</p>
+            <a href="dashboard.html" class="back-link">← Kembali ke Dashboard</a>
+        </div>
+
+        <div class="tracking-container">
+            <h2>Cari Delivery Order</h2>
+            <div class="search-box">
+                <input type="text" id="nomorDO" placeholder="Masukkan nomor Delivery Order (contoh: DO001, DO002, DO003)">
+                <button onclick="cariDeliveryOrder()">Cari</button>
+            </div>
+
+            <!-- Area hasil pencarian -->
+            <div id="hasilPencarian" class="tracking-result">
+                <h3>Detail Pengiriman</h3>
+                
+                <div class="info-item" style="margin-bottom: 20px;">
+                    <div class="info-label">Nama Mahasiswa:</div>
+                    <div class="info-value" id="namaMahasiswa">-</div>
+                </div>
+
+                <div class="info-item" style="margin-bottom: 20px;">
+                    <div class="info-label">Status Pengiriman:</div>
+                    <div class="info-value" id="statusPengiriman">-</div>
+                </div>
+
+                <!-- Progress Bar -->
+                <div class="info-label">Progress Pengiriman:</div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressBar" style="width: 0%;"></div>
+                </div>
+                <div style="text-align: center; margin-top: 10px;">
+                    <span id="progressText">0%</span>
+                </div>
+
+                <!-- Detail informasi -->
+                <div class="status-info">
+                    <div class="info-item">
+                        <div class="info-label">Ekspedisi</div>
+                        <div class="info-value" id="ekspedisi">-</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Tanggal Kirim</div>
+                        <div class="info-value" id="tanggalKirim">-</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Jenis Paket</div>
+                        <div class="info-value" id="jenisPaket">-</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Total Pembayaran</div>
+                        <div class="info-value" id="totalPembayaran">-</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contoh nomor DO yang tersedia -->
+            <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 8px;">
+                <h4>Contoh Nomor DO yang tersedia:</h4>
+                <ul>
+                    <li><strong>DO001</strong> - Ahmad Rizki (Dalam Perjalanan)</li>
+                    <li><strong>DO002</strong> - Siti Nurhaliza (Terkirim)</li>
+                    <li><strong>DO003</strong> - Budi Santoso (Diproses)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/script.js"></script>
+    <script>
+        /**
+         * Inisialisasi halaman tracking saat dimuat
+         * Mengecek status login pengguna
+         */
+        window.onload = function() {
+            cekStatusLogin();
+        }
+
+        /**
+         * Fungsi untuk memverifikasi status login pengguna
+         * Redirect ke halaman login jika belum login
+         */
+        function cekStatusLogin() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn');
+            if (!isLoggedIn) {
+                window.location.href = 'index.html';
+            }
+        }
+
+        /**
+         * Fungsi untuk navigasi kembali ke dashboard
+         */
+        function kembaliKeDashboard() {
+            window.location.href = 'dashboard.html';
+        }
+
+        /**
+         * Fungsi untuk mencari data delivery order berdasarkan nomor DO
+         * Menggunakan data dari deliveryOrders di script.js
+         */
+        function cariDeliveryOrder() {
+            const nomorDO = document.getElementById('nomorDO').value.trim().toUpperCase();
+            
+            // Validasi input nomor DO
+            if (!nomorDO) {
+                alert('Mohon masukkan nomor Delivery Order!');
+                return;
+            }
+
+            // Cari data DO menggunakan fungsi dari script.js
+            const dataOrder = searchDeliveryOrder(nomorDO);
+            
+            if (dataOrder) {
+                tampilkanHasilPencarian(dataOrder);
+            } else {
+                alert('Nomor Delivery Order tidak ditemukan!');
+                sembunyikanHasilPencarian();
+            }
+        }
+
+        /**
+         * Fungsi untuk menampilkan hasil pencarian delivery order
+         * @param {Object} data - Data delivery order yang ditemukan
+         */
+        function tampilkanHasilPencarian(data) {
+            // Tampilkan area hasil pencarian
+            document.getElementById('hasilPencarian').style.display = 'block';
+            
+            // Isi data ke elemen HTML yang sesuai
+            document.getElementById('namaMahasiswa').textContent = data.namaMahasiswa;
+            document.getElementById('statusPengiriman').textContent = data.status;
+            document.getElementById('ekspedisi').textContent = data.ekspedisi;
+            document.getElementById('tanggalKirim').textContent = formatTanggal(data.tanggalKirim);
+            document.getElementById('jenisPaket').textContent = data.jenispaket;
+            document.getElementById('totalPembayaran').textContent = formatRupiah(data.totalPembayaran);
+            
+            // Perbarui progress bar sesuai status pengiriman
+            updateProgressBar(data.progress);
+            
+            // Scroll otomatis ke area hasil pencarian
+            document.getElementById('hasilPencarian').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        /**
+         * Fungsi untuk menyembunyikan area hasil pencarian
+         */
+        function sembunyikanHasilPencarian() {
+            document.getElementById('hasilPencarian').style.display = 'none';
+        }
+
+        /**
+         * Fungsi untuk memperbarui progress bar dengan animasi
+         * @param {number} progress - Persentase progress (0-100)
+         */
+        function updateProgressBar(progress) {
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+            
+            // Animasi progress bar dengan delay
+            setTimeout(() => {
+                progressBar.style.width = progress + '%';
+                progressText.textContent = progress + '%';
+                
+                // Ubah warna progress bar berdasarkan status
+                if (progress === 100) {
+                    progressBar.style.background = '#28a745'; // Hijau untuk pengiriman selesai
+                } else if (progress >= 50) {
+                    progressBar.style.background = 'linear-gradient(90deg, #ffc107, #fd7e14)'; // Kuning-orange untuk dalam perjalanan
+                } else {
+                    progressBar.style.background = '#6c757d'; // Abu-abu untuk sedang diproses
+                }
+            }, 100);
+        }
+
+        /**
+         * Fungsi untuk memformat tanggal ke format Indonesia
+         * @param {string} tanggal - Tanggal dalam format string
+         * @returns {string} Tanggal dalam format Indonesia
+         */
+        function formatTanggal(tanggal) {
+            const date = new Date(tanggal);
+            const options = { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            };
+            return date.toLocaleDateString('id-ID', options);
+        }
+
+        /**
+         * Event listener untuk pencarian dengan tombol Enter
+         * Memungkinkan pencarian tanpa mengklik tombol Cari
+         */
+        document.getElementById('nomorDO').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                cariDeliveryOrder();
+            }
+        });
+    </script>
+</body>
+</html>
