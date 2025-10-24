@@ -4,17 +4,17 @@ Aplikasi web untuk sistem pemesanan dan manajemen bahan ajar Universitas Terbuka
 
 ## Fitur Utama
 
-- **Login System** - Autentikasi pengguna dengan validasi
-- **Dashboard** - Menu utama dengan berbagai fitur
-- **Manajemen Stok** - Kelola data bahan ajar dan stok
-- **Tracking Pengiriman** - Lacak status delivery order
-- **Laporan** - Monitoring progress dan rekap data
+- **Login System** - Autentikasi pengguna dengan validasi dan notifikasi
+- **Dashboard** - Menu utama dengan layout 2x2 dan submenu dinamis
+- **Manajemen Stok** - Kelola data bahan ajar dengan validasi duplikasi
+- **Tracking Pengiriman** - Lacak status delivery order dengan progress bar animasi
+- **Laporan** - Monitoring progress dan rekap data real-time
 
 ## Teknologi
 
-- HTML5
-- CSS3 (Grid, Flexbox, Responsive Design)
-- JavaScript (Vanilla JS)
+- HTML5 dengan semantic markup
+- CSS3 (Grid, Flexbox, Responsive Design, Material Design Blue Theme)
+- JavaScript (Vanilla JS) dengan dokumentasi lengkap
 - Local Storage untuk session management
 
 ## Cara Menjalankan
@@ -60,10 +60,11 @@ sitta-praktik/
 - Histori transaksi
 
 ### Manajemen Stok
-- Tambah bahan ajar baru dengan validasi
-- Tabel stok dengan status (Tersedia/Menipis/Habis)
-- Statistik stok real-time
-- Validasi duplikasi kode dan nama
+- Tambah bahan ajar baru dengan validasi lengkap
+- Tabel stok dengan status color-coded (Tersedia/Menipis/Habis)
+- Statistik stok real-time dalam satuan pcs
+- Validasi duplikasi kode dan nama (case-insensitive)
+- Validasi stok minimal > 0
 
 ### Tracking Pengiriman
 - Pencarian berdasarkan nomor DO
@@ -73,9 +74,18 @@ sitta-praktik/
 ## Validasi & Fitur Keamanan
 
 - Session management dengan localStorage
-- Validasi form input
+- Validasi form input dengan notifikasi popup
 - Duplikasi check untuk kode dan nama bahan ajar
 - Auto-redirect jika belum login
+- Validasi stok tidak boleh 0 atau negatif
+
+## Fitur Terbaru
+
+- **UI/UX Improvements**: Material Design Blue theme
+- **Enhanced Navigation**: Text links untuk navigasi yang lebih clean
+- **Better Validation**: Validasi komprehensif dengan popup notifications
+- **Responsive Footer**: Footer dengan credit developer
+- **Bahasa Indonesia**: Terminologi konsisten (Kata Sandi, pcs, dll)
 
 ## Browser Support
 
@@ -86,4 +96,5 @@ sitta-praktik/
 
 ## Author
 
-Grandis Ardana A F - Praktik STSI4209 Pemrograman Berbasis Web - Universitas Terbuka
+Developed by Grandis Ardana A F  
+Praktik STSI4209 Pemrograman Berbasis Web - Universitas Terbuka
