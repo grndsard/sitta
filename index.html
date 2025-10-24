@@ -10,7 +10,7 @@
     <div class="login-container">
         <div class="login-header">
             <h1>SITTA</h1>
-            <p>Sistem Pemesanan Bahan Ajar Universitas Terbuka</p>
+            <p>Sistem Pemesanan Bahan Ajar <br> Universitas Terbuka</p>
         </div>
         
         <form id="loginForm">
@@ -20,13 +20,19 @@
             </div>
             
             <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password" required placeholder="Masukkan password Anda">
+                <label for="password">Kata Sandi:</label>
+                <input type="password" id="password" required placeholder="Masukkan kata sandi Anda">
+                <div class="forgot-password">
+                    <a href="#" onclick="bukaModal('lupaPasswordModal')" class="link-text">Lupa Kata Sandi?</a>
+                </div>
             </div>
             
             <button type="submit" class="btn btn-primary">Login</button>
-            <button type="button" class="btn btn-secondary" onclick="bukaModal('lupaPasswordModal')">Lupa Password</button>
-            <button type="button" class="btn btn-secondary" onclick="bukaModal('daftarModal')">Daftar</button>
+            
+            <div class="register-section">
+                <p>Belum Memiliki Akun?</p>
+                <a href="#" onclick="bukaModal('daftarModal')" class="link-text">Daftar Disini</a>
+            </div>
         </form>
     </div>
 
@@ -34,12 +40,12 @@
     <div id="lupaPasswordModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="tutupModal('lupaPasswordModal')">&times;</span>
-            <h2>Lupa Password</h2>
+            <h2>Lupa Kata Sandi</h2>
             <div class="form-group">
                 <label for="emailReset">Email:</label>
                 <input type="email" id="emailReset" placeholder="Masukkan email Anda">
             </div>
-            <button class="btn btn-primary" onclick="resetPassword()">Kirim Reset Password</button>
+            <button class="btn btn-primary" onclick="resetPassword()">Kirim Reset Kata Sandi</button>
         </div>
     </div>
 
@@ -57,8 +63,8 @@
                 <input type="email" id="emailDaftar" placeholder="Masukkan email">
             </div>
             <div class="form-group">
-                <label for="passwordDaftar">Password:</label>
-                <input type="password" id="passwordDaftar" placeholder="Masukkan password">
+                <label for="passwordDaftar">Kata Sandi:</label>
+                <input type="password" id="passwordDaftar" placeholder="Masukkan kata sandi">
             </div>
             <button class="btn btn-primary" onclick="daftarAkun()">Daftar</button>
         </div>
@@ -94,7 +100,7 @@
                 // Arahkan ke halaman dashboard
                 window.location.href = 'dashboard.html';
             } else {
-                alert('Email/password yang anda masukkan salah');
+                alert('Email/kata sandi yang anda masukkan salah');
             }
         });
 
@@ -121,7 +127,7 @@
         function resetPassword() {
             const email = document.getElementById('emailReset').value;
             if (email) {
-                alert('Link reset password telah dikirim ke email Anda!');
+                alert('Link reset kata sandi telah dikirim ke email Anda!');
                 tutupModal('lupaPasswordModal');
             } else {
                 alert('Mohon masukkan email Anda!');
