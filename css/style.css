@@ -7,7 +7,7 @@
 
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
     min-height: 100vh;
 }
 
@@ -55,7 +55,7 @@ body {
 
 .form-group input:focus {
     outline: none;
-    border-color: #667eea;
+    border-color: #2196F3;
 }
 
 .btn {
@@ -70,12 +70,12 @@ body {
 }
 
 .btn-primary {
-    background: #667eea;
+    background: #2196F3;
     color: white;
 }
 
 .btn-primary:hover {
-    background: #5a6fd8;
+    background: #1976D2;
 }
 
 .btn-secondary {
@@ -151,14 +151,14 @@ body {
     position: absolute;
     bottom: 15px;
     right: 20px;
-    color: #667eea;
+    color: #2196F3;
     text-decoration: none;
     font-size: 14px;
     transition: color 0.3s;
 }
 
 .back-link:hover {
-    color: #5a6fd8;
+    color: #1976D2;
     text-decoration: underline;
 }
 
@@ -240,7 +240,7 @@ body {
 
 .search-box button {
     padding: 12px 24px;
-    background: #667eea;
+    background: #2196F3;
     color: white;
     border: none;
     border-radius: 6px;
@@ -281,7 +281,7 @@ body {
     background: white;
     padding: 15px;
     border-radius: 6px;
-    border-left: 4px solid #667eea;
+    border-left: 4px solid #2196F3;
 }
 
 .info-label {
@@ -363,4 +363,18 @@ body {
     .form-row {
         grid-template-columns: 1fr;
     }
+}
+
+/* Footer styling */
+.footer {
+    text-align: center;
+    padding: 20px;
+    margin-top: 30px;
+    color: white;
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+.footer p {
+    margin: 0;
 }

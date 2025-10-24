@@ -58,6 +58,10 @@
         </div>
     </div>
 
+    <footer class="footer">
+        <p>Developed by Grandis Ardana A F</p>
+    </footer>
+
     <script src="js/script.js"></script>
     <script>
         /**
@@ -106,6 +110,8 @@
         function bukaSubmenu(submenuId) {
             const submenu = document.getElementById(submenuId);
             submenu.style.display = submenu.style.display === 'none' ? 'block' : 'none';
+            // Bersihkan content area ketika membuka submenu
+            document.getElementById('contentArea').innerHTML = '';
         }
 
         /**
@@ -145,21 +151,21 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td>DO001</td>
+                                <td>JNE001</td>
                                 <td>Ahmad Rizki</td>
                                 <td>2024-01-15</td>
                                 <td>Dalam Perjalanan</td>
                                 <td>Rp 150.000</td>
                             </tr>
                             <tr>
-                                <td>DO002</td>
+                                <td>POS001</td>
                                 <td>Siti Nurhaliza</td>
                                 <td>2024-01-10</td>
                                 <td>Terkirim</td>
                                 <td>Rp 200.000</td>
                             </tr>
                             <tr>
-                                <td>DO003</td>
+                                <td>TIKI001</td>
                                 <td>Budi Santoso</td>
                                 <td>2024-01-20</td>
                                 <td>Diproses</td>
@@ -233,16 +239,16 @@
                             <tr>
                                 <td>MKDU4112</td>
                                 <td>Ilmu Alamiah Dasar</td>
-                                <td>20 pcs</td>
-                                <td>100 pcs</td>
-                                <td>Rp 1.100.000</td>
+                                <td>5 pcs</td>
+                                <td>10 pcs</td>
+                                <td>Rp 275.000</td>
                             </tr>
                             <tr>
                                 <td>MKDU4113</td>
                                 <td>Ilmu Sosial Budaya Dasar</td>
-                                <td>35 pcs</td>
-                                <td>175 pcs</td>
-                                <td>Rp 1.680.000</td>
+                                <td>0 pcs</td>
+                                <td>0 pcs</td>
+                                <td>Rp 0</td>
                             </tr>
                             <tr>
                                 <td>MKDU4221</td>

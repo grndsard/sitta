@@ -19,8 +19,8 @@ const users = [
 const dataBahanAjar = [
     { kode: "MKDU4110", nama: "Bahasa Indonesia", stok: 150, harga: 45000 },
     { kode: "MKDU4111", nama: "Pendidikan Kewarganegaraan", stok: 200, harga: 50000 },
-    { kode: "MKDU4112", nama: "Ilmu Alamiah Dasar", stok: 100, harga: 55000 },
-    { kode: "MKDU4113", nama: "Ilmu Sosial Budaya Dasar", stok: 175, harga: 48000 },
+    { kode: "MKDU4112", nama: "Ilmu Alamiah Dasar", stok: 10, harga: 55000 },
+    { kode: "MKDU4113", nama: "Ilmu Sosial Budaya Dasar", stok: 0, harga: 48000 },
     { kode: "MKDU4221", nama: "Statistika", stok: 80, harga: 60000 }
 ];
 
@@ -29,30 +29,30 @@ const dataBahanAjar = [
  * Object dengan nomor DO sebagai key dan detail pengiriman sebagai value
  */
 const deliveryOrders = {
-    "DO001": {
+    "JNE001": {
         namaMahasiswa: "Ahmad Rizki",
         status: "Dalam Perjalanan",
         progress: 75,
         ekspedisi: "JNE Express",
-        tanggalKirim: "2024-01-15",
-        jenispaket: "Reguler",
+        tanggalKirim: "2025-10-15",
+        jenispaket: "Hemat",
         totalPembayaran: 150000
     },
-    "DO002": {
+    "POS001": {
         namaMahasiswa: "Siti Nurhaliza",
         status: "Terkirim",
         progress: 100,
         ekspedisi: "Pos Indonesia",
-        tanggalKirim: "2024-01-10",
+        tanggalKirim: "2025-10-10",
         jenispaket: "Express",
         totalPembayaran: 200000
     },
-    "DO003": {
+    "TIKI001": {
         namaMahasiswa: "Budi Santoso",
         status: "Diproses",
         progress: 25,
         ekspedisi: "TIKI",
-        tanggalKirim: "2024-01-20",
+        tanggalKirim: "2025-10-20",
         jenispaket: "Reguler",
         totalPembayaran: 175000
     }
